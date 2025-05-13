@@ -1,0 +1,1492 @@
+<html>
+<style>
+    img {
+        _height: 200px;
+        _width: 200px;
+        border: 1px solid black;
+        margin-right: 2px;
+        margin-top: 2px;
+        
+    }
+    .imgCatalog {
+        border: 1px solid white;
+        width: 200px;
+        height: auto;
+    }
+    .imgCatalog:hover {
+        _border: 2px solid greenyellow;
+        
+    }
+    .imgGallery {
+        width: 80px;
+        border: 1px solid black;
+        _padding: 10px;
+        margin-right: 2px;
+        margin-top: 10px;
+        
+    }
+    .__item {
+    }
+    #idItem{
+        width: 560px;
+        height: 500px;
+        border: 1px solid black;
+        _border-radius: 10px;
+        padding: 10px;
+        visibility: hidden;
+        position: absolute;
+        left: 100px;
+        top: 170px;
+        background-color: white;
+    }
+    .zindex {
+        width: 560px;
+        height: 40px;
+        _border: 1px solid black;
+        background-color: greenyellow;
+        margin-top: 5px;
+    
+    }
+    .__image {
+    }
+    #idImage {
+        width: 560px;
+        height: 600px;
+        border: 1px solid black;
+        _border-radius: 10px;
+        padding: 10px;
+        visibility: hidden;
+        position: absolute;
+        left: 200px;
+        top: 50px;
+        background-color: white;
+    }
+    #idImage img{
+        border: 1px solid black;
+        width: auto;
+        padding: 0px;
+        _height: 500px;
+        
+    }
+    .moveImage {
+        _border: 1px solid black;
+        
+        
+    }
+    #idResizeWindowImage {
+        border: 1px solid black;
+        height: 20px;
+        width: 60px;
+        background-color: aqua;
+        _margin-top: 5px;
+        position: absolute;
+        _bottom: 0;
+        top: -22px;
+        right: -1px;
+        
+    }
+    #idResizeUpImage {
+        border: 1px solid black;
+        height: 20px;
+        width: 60px;
+        background-color: aquamarine;
+        _margin-top: 5px;
+        position: absolute;
+        _bottom: 0;
+        top: -22px;
+        right: 60px;
+        
+    }
+    #idResizeDownImage {
+        border: 1px solid black;
+        height: 20px;
+        width: 60px;
+        background-color: cornflowerblue;
+        _margin-top: 5px;
+        position: absolute;
+        _bottom: 0;
+        top: -22px;
+        right: 120px;
+        
+    }
+</style>    
+<!--<body onload="_loadJSON(); resizeImageGallery();" onkeypress="pressKey(event); footerPressKey(event)">-->
+<body onload="loadCheckbox(); _loadAPIYoutube();_resizeImageGallery()" onkeypress="pressKey(event); footerPressKey(event)">
+
+<script>
+
+var _IndexFocus = -1;
+var _ClassDiv = "imgCatalog"; // imgGallery
+var _IndexCatalog = -1;
+    
+function pressKey(e) {
+    /*
+    var x = e.which || e.keyCode;
+    document.getElementById("demo").innerHTML = "The Unicode value is : " + x;
+    */
+    //alert(e.key);
+    var img;
+    var x = e.key;
+
+    switch (x) {
+        case 'a':
+            focusImg(_ClassDiv);
+            break;
+        case 'k':
+            nextImg(_ClassDiv);
+            break;
+        case 'j':
+            backImg(_ClassDiv);
+            break;
+        case 'm':
+
+            if (document.getElementById("idImage").style.visibility == "visible") {
+                document.getElementById("idImage").style.visibility = "hidden";
+            }
+            else if (document.getElementById("idItem").style.visibility == "visible") {
+                document.getElementsByClassName("imgGallery")[_IndexFocus].onclick();
+            }
+            else {
+                
+                _ClassDiv = "imgGallery";
+                _IndexCatalog = _IndexFocus;
+                _IndexFocus = -1;
+                //alert("item ic ");
+                document.getElementsByClassName("imgCatalog")[_IndexCatalog].onclick();
+                           
+            }
+
+            /**
+            if (document.getElementById("idImage").style.visibility == "visible") {
+                document.getElementById("idImage").style.visibility = "hidden";
+            }
+            else {
+                if (_IndexFocus >= 0) { 
+                    if (_ClassDiv == "imgCatalog") {
+                        _ClassDiv = "imgGallery";
+                        _IndexCatalog = _IndexFocus;
+                        _IndexFocus = -1;
+                        //displayItem(_IndexCatalog, 1);
+
+                        document.getElementsByClassName("imgCatalog")[_IndexCatalog].onclick();
+
+                    }
+                    else if (_ClassDiv == "imgGallery") {
+                        //alert("show image " + _IndexCatalog + " " + _IndexFocus);
+                        //img = _DATAobj.CATALOG[_IndexCatalog].GALLERY[_IndexFocus];
+                        //displayImage(img);
+                        document.getElementsByClassName("imgGallery")[_IndexFocus].onclick();
+
+                    }
+                }
+                else {
+                    alert("Error M : Index Focus " + _IndexFocus);
+                }
+                
+            }
+            **/
+            break;
+        case 'n':
+            if (document.getElementById("idImage").style.visibility == "visible") {
+                closeDiv(event, 'idImage');
+            }
+            else if (document.getElementById("idItem").style.visibility == "visible") {
+                closeDiv(event, 'idItem');
+                _ClassDiv = "imgCatalog";
+                //alert(_IndexCatalog);
+                _IndexFocus = _IndexCatalog;
+            }
+            else {
+                
+            }
+            break;
+        case 'i':
+            moveUpDiv('idImage');
+            moveUpDiv('idItem');
+            break;
+        case 'l':
+            moveDownDiv('idImage');
+            moveDownDiv('idItem');
+            break;
+        case 'o':
+            moveRightDiv('idImage');
+            moveRightDiv('idItem');
+            break;
+        case 'u':
+            moveLeftDiv('idImage');            
+            moveLeftDiv('idItem');
+            break;
+    }
+    
+}
+    
+function moveUpDiv(id) {
+    var i;
+    
+    if (document.getElementById(id).style.zIndex == 1) {
+    
+    //if (document.getElementById(id).style.visibility == "visible") {
+        i = document.getElementById(id).offsetTop;
+        document.getElementById(id).style.top = i - 2;
+    }
+
+}    
+
+    
+function moveDownDiv(id) {
+    var i;
+    if (document.getElementById(id).style.zIndex == 1) {
+        i = document.getElementById(id).offsetTop;
+        document.getElementById(id).style.top = i + 2;
+    }
+}    
+
+function moveRightDiv(id) {
+    var i;
+    if (document.getElementById(id).style.zIndex == 1) {
+        i = document.getElementById(id).offsetLeft;
+        document.getElementById(id).style.left = i + 2;
+    }
+}    
+    
+function moveLeftDiv(id) {
+    var i;
+    if (document.getElementById(id).style.zIndex == 1) {
+        i = document.getElementById(id).offsetLeft;
+        document.getElementById(id).style.left = i - 2;
+    }
+}    
+    
+    
+function focusImg(cname) {        
+    var x = document.getElementsByClassName(cname);
+    if (x.length > 0) {
+        for (i = 0; i < x.length; i++) {
+            x[i].style.border = "1px solid black";    
+        }
+        _IndexFocus = 0; 
+        x[_IndexFocus].style.border = "1px solid greenyellow";
+    }
+}
+    
+function nextImg(cname) {
+    var x = document.getElementsByClassName(cname);
+    var i;
+    
+    if ((_IndexFocus + 1) >= x.length)  _IndexFocus = 0;
+    else                                _IndexFocus++;
+    
+    for (i = 0; i < x.length; i++) {
+        if (i == _IndexFocus) {
+            x[i].style.border = "1px solid greenyellow";
+        }
+        else {
+            x[i].style.border = "1px solid black";
+        }
+    }
+    
+    document.getElementById("demo").innerHTML = _IndexFocus; 
+}
+    
+function backImg(cname) {
+    var x = document.getElementsByClassName(cname);
+    var i;
+
+    if (_IndexFocus <= 0)   _IndexFocus = x.length - 1;
+    else                    _IndexFocus--;
+
+    for (i = 0; i < x.length; i++) {
+        if (i == _IndexFocus) {
+            x[i].style.border = "1px solid greenyellow";
+        }
+        else {
+            x[i].style.border = "1px solid black";
+        }
+    }
+
+    document.getElementById("demo").innerHTML = _IndexFocus;
+}    
+    
+</script>    
+
+<h2>Create Object from JSON String</h2>
+<p id="demo"></p>
+
+<div class="windows" _class="item" id="idItem" onmouseenter="enterItem()" >
+    <div class="zindex" id="idZIndex" 
+         onclick="clickZIndex(event)"
+         _onmouseout="mouseOut('idItem')"
+         onmouseout="outZIndex()"
+         onmousemove="moveZIndex(event)"
+         onmouseup="upZIndex(event)"
+         onmousedown="downZIndex(event)"
+         
+    >
+    <button type="button" onclick="closeDiv(event, 'idItem')">Close</button>
+    </div> 
+    <div class="info" id="idInfo"></div>
+    <div class="gallery" id="idGallery"></div>
+    <div class="galleryFooter" id="idGalleryFooter"></div>
+
+</div>
+
+<div class="windows" _class="image" id="idImage" onclick="clickDivImage()" _onmouseover="mouseDown(event)">
+    <div class="moveImage" id="idMoveImage"></div>    
+    <div class="displayImage" id="idDisplayImage"></div>
+    <div class="resizeWindowImage" 
+         id="idResizeWindowImage"
+         onmousedown="ResizeWMouseDown(event)"
+         onmousemove="ResizeWMouseMove(event)"
+         onmouseout="ResizeWMouseOut(event)"
+         ></div>
+    <div class="resizeUpImage"
+         id="idResizeUpImage"
+         onclick="resizeUpImage()"
+         ></div>
+    <div class="resizeDownImage"
+         id="idResizeDownImage"
+         onclick="resizeDownImage()"
+         ></div>
+</div>    
+
+<script>
+//var _XResize;
+//var _YResize;
+var _Height;
+    
+function ResizeWMouseDown(e) {
+    document.getElementById("idResizeWindowImage").style.backgroundColor = "red";
+    var x = e.clientX;
+    var y = e.clientY;
+    var coor = "Coordinates image : (" + x + "," + y + ")";
+    
+    _Xe = e.clientX;
+    _Ye = e.clientY;
+    
+    //_XDiv = document.getElementById("idImage").offsetWidth;
+    //_YDiv = document.getElementById("idImage").offsetHeight;
+    _XDiv = document.getElementById("idImage").clientWidth;
+    //_YDiv = document.getElementById("idImage").clientHeight;
+    
+    _YDiv = document.getElementById("idImage").offsetTop; 
+    _Height = document.getElementById("idImage").clientHeight;
+    
+    
+    _XDiv -= 20;
+    //_YDiv -= 10;
+    _Height -= 20;
+    //alert(document.getElementById("idImage").getPropertyValue("height"));
+    
+    document.getElementById("demo").innerHTML = coor;
+    
+}
+    
+function ResizeWMouseMove(e) {
+    var x = e.clientX;
+    var y = e.clientY;
+    
+    var coor = "Coordinatess : (" + x + "," + y + ")";
+
+    if (e.buttons == 1){
+        document.getElementById("idImage").style.width = x - _Xe + _XDiv;
+        //document.getElementById("idImage").style.height = y - _Ye + _YDiv;
+        
+        document.getElementById("idImage").style.top = y - (_Ye - _YDiv);
+        //document.getElementById("idImage").style.height = x - _Xe + _Height;
+        //document.getElementById("idImage").style.height = _Height - y + (_Ye - _YDiv);
+        document.getElementById("idImage").style.height = _Height - y + _Ye;
+    }
+
+    document.getElementById("demo").innerHTML = coor;    
+ 
+}    
+
+function ResizeWMouseOut(e) {
+    document.getElementById("idResizeWindowImage").style.backgroundColor = "aqua";
+    
+    
+}    
+    
+</script>
+  
+    
+<script>
+    
+function clickDivImage() {
+    //alert("div image");
+    document.getElementById("idItem").style.zIndex = 0;
+    document.getElementById("idImage").style.zIndex = 1; 
+}    
+    
+var _Xe, _Ye;
+var _XDiv, _YDiv;     
+    
+function enterItem() {
+    var coor = "Helloo j:/Simon/go/server/simon/travel/json.html";
+    
+    document.getElementById("demo").innerHTML = coor;    
+}
+
+function clickZIndex(e) {
+    _document.getElementById("idItem").style.border = "1px solid greenyellow";
+    document.getElementById("idZIndex").style.backgroundColor = "red";
+
+}   
+    
+function downZIndex(e) {
+    //document.getElementById("idItem").style.border = "1px solid greenyellow";
+    document.getElementById("idZIndex").style.backgroundColor = "red";
+    var x = e.clientX;
+    var y = e.clientY;
+    var coor = "Coordinates : (" + x + "," + y + ")";
+    
+    _Xe = e.clientX;
+    _Ye = e.clientY;
+    
+    _XDiv = document.getElementById("idItem").offsetLeft;
+    _YDiv = document.getElementById("idItem").offsetTop; 
+    
+    document.getElementById("idImage").style.zIndex = 0;
+    document.getElementById("idItem").style.zIndex = 1;
+
+}    
+
+function moveZIndex(e) {
+    var x = e.clientX;
+    var y = e.clientY;
+    
+    var coor = "Coordinatess : (" + x + "," + y + ")";
+    coor += " Div Item " + _XDiv + " " + _YDiv; 
+
+    if (e.buttons == 1){
+        document.getElementById("idItem").style.left = x - (_Xe - _XDiv);
+        document.getElementById("idItem").style.top = y - (_Ye - _YDiv);
+    }
+
+    //coor += " zindex = " + document.getElementById("idItem").style.zIndex; 
+    
+    document.getElementById("demo").innerHTML = coor;
+    
+}
+
+function upZIndex(e) {
+    var x = e.clientX;
+    var y = e.clientY; 
+    
+} 
+    
+function outZIndex() {
+    document.getElementById("idZIndex").style.backgroundColor = "greenyellow";
+    _document.getElementById("idItem").style.border = "1px solid black";
+}    
+</script>    
+    
+    
+<script>
+var text =  '{                                                      ' +
+            '    "employees":[                                      ' +
+            '        {"firstName":"Clint", "lastName":"Eastwood"},  ' +
+            '        {"firstName":"Mel", "lastName":"Gibson"},      ' +
+            '        {"firstName":"John", "lastName":"Wayne"}       ' +
+            '                ]                                      ' +
+            '}';
+    
+var obj = JSON.parse(text);
+document.getElementById("demo").innerHTML = 
+    obj.employees[0].firstName + " " +
+    obj.employees[0].lastName;
+    
+</script>    
+
+<button type="button" onclick="loadJSON()" _onclick="_loadJSON(); displayDATA()">Gett my CD Collection</button>
+<button type="button" onclick="resizeImageGallery()" >Resize</button>
+<br>
+
+<p id="idCatalog"></p>
+
+<script>
+
+var _DATAobj = {};
+var _MaxImgPage = 4;
+// var _MaxImgPage = 5;
+    
+//loadJSON();
+//displayDATA();     
+if (!(getUrlParam()["np"] == undefined)) {
+    //alert("inside");
+    loadJSON();
+    _displayDATA();  
+    
+    //resizeImageGallery();
+    
+}
+//resizeImageGallery();    
+    
+function loadJSON(){
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            _DATAobj = JSON.parse(this.responseText);
+
+            displayDATA();
+            
+        }
+    };
+    xmlhttp.open("GET", "cd_catalog.json", true);
+    xmlhttp.send();
+}
+
+function getUrlParam() {
+    
+    var kv = {};
+    var res = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+        kv[key] = value;
+    });
+
+    return kv;
+}    
+ 
+    
+    
+function displayDATA() {
+    //alert("display data");
+    //loadJSON();
+    
+    //alert("display data");
+    
+    //var maxImgPage = 4;
+    var maxImgPage = _MaxImgPage;
+    var maxPage = 0;
+    var numPage = getUrlParam()["np"];
+    
+    if (numPage == undefined) numPage = 1;
+    
+    var img = new Image();
+    
+    var i, j;
+    var y;
+    var x = _DATAobj.CATALOG;
+    var e = document.getElementById("idCatalog"); e.innerHTML = "";
+    for (i = 0; i < x.length; i++) {
+        //e.innerHTML += x[i].TITLE + "<br>" + x[i].ARTIST + "<br>"; 
+        
+        //if (i < maxImgPage && x[i].GALLERY.length > 0) {
+        if ((i >= ((maxImgPage * numPage) - maxImgPage)) &&
+            (i < (maxImgPage * numPage)) && 
+            x[i].GALLERY.length > 0) {
+            
+ 
+            //img.src = x[i].GALLERY[0];
+            
+  
+            //alert(img.width);
+            
+            e.innerHTML +=  "<img class=\"imgCatalog\" " + 
+                            //" draggable=\"true\" " +
+                            //" ondragstart=\"drag(event)\" " +
+                            " ondragstart=\"drag(event)\" " +
+                            " draggable=\"true\" " +
+                            " id=\"idDropImg\" " +
+                            " onload=\"resizeWImg(this, 260)\"  " +
+                            " src=\"images/" + x[i].GALLERY[0] + "\" " + 
+                            " onmouseover=\"mouseOverImg(this,'imgCatalog')\" " + 
+                            " onclick=\"displayItem(" + i + ",1)\" " +
+                            ">";             
+        }
+        
+        
+        //resizeImageGallery()
+        
+        //displayItem(i);
+        
+        y = x[i].GALLERY;
+        for (j = 0; j < y.length; j++) {
+            //e.innerHTML += y[j] + " ";
+        }
+        //e.innerHTML += "<br>";
+        
+        if (i%maxImgPage == 0) maxPage++;
+        
+        
+    }
+    
+    document.getElementById("idFooter").innerHTML = maxPage + " | ";
+    
+    for (i = 0; i < maxPage; i++) {
+        if ((i+1) == numPage) {
+            document.getElementById("idFooter").innerHTML += " " + 
+            "<a style=\"font-weight:bold; color:red\" class=\"aFooter\" href=\"?np=" + (i+1) + "\" >" + (i+1) + "</a>";
+
+        }
+        else {
+            document.getElementById("idFooter").innerHTML += " " + 
+            "<a class=\"aFooter\" href=\"?np=" + (i+1) + "\" >" + 
+            (i+1) + "</a>";        
+            
+        }
+        
+    }
+    
+    //alert("display gallery " + document.images.length);
+    //resizeImageGallery();
+    //if (document.images.length > 0) resizeImageGallery();
+
+}
+
+//alert("resize");    
+//resizeImageGallery();
+    
+//window.onload = resizeImageGallery();  
+    
+function resizeImageGallery() {
+    //alert("resize");
+    var x = document.getElementsByClassName("imgCatalog");
+    var i;
+    var txt = "";
+    //alert("resize len=" + x.length);
+    
+    for (i = 0; i < x.length; i++) {
+        /*
+        if (x[i].complete) alert(x[i]);
+        else {
+            break;
+            resizeImageGallery();
+        }
+        */
+        
+        //alert(i + " W=" + x[i].width + " H=" + x[i].height); 
+        txt += i + " W=" + x[i].width + " H=" + x[i].height + "<br>";
+        if(x[i].height != 0 && x[i].height < x[i].width) {
+            //alert("inside");
+            //x[i].style.height = x[i].height * 1.5;
+            //x[i].style.width = x[i].width * 1.5;
+            //x[i].style.height = 400;
+            x[i].style.width = 300;
+        }
+        //x[i].style.height = 200;
+        //x[i].style.width = 200;
+    }
+    
+    document.getElementById("demo").innerHTML = txt;
+    
+}    
+
+function check() {
+    
+    alert("checking");
+}    
+
+function resizeWImg(img, w) {
+    //alert("checking img ...\n" + img.src + "\n" + img.width + "\n" +img.height);
+    if (img.height < img.width) {
+        img.style.width = w;
+        
+    }
+    
+}
+ 
+function resizeWWImg(img, w) {
+    //alert(w +"\nchecking img ...\n" + img.src + "\n" + img.width + "\n" +img.height);
+    //if ((img.height > img.width) && (img.width > w)) {
+    if (img.width > w) {
+
+        img.style.width = w;
+    }
+    
+}
+    
+function resizeUpImage() {
+    var x = document.getElementById("idDropImg");
+    x.style.width = x.width * 1.2;
+    
+}    
+
+function resizeDownImage() {
+    var x = document.getElementById("idDropImg");
+    x.style.width = x.width * 0.8;
+    
+}    
+    
+    
+function mouseOverImg(e, classImg) {
+    var i;
+    var x = document.getElementsByClassName(classImg);
+    
+    _ClassDiv = classImg;
+    
+    for (i = 0; i < x.length; i++) {
+        x[i].style.border = "1px solid black";
+        if (e == x[i]) {
+            //alert("bingo " + i);
+            _IndexFocus = i;
+            e.style.border = "1px solid greenyellow";
+        }
+    }
+    
+    //e.style.border = "1px solid greenyellow";
+
+}
+    
+function displayItem(index, np) {
+    
+    //_IndexCatalog = _IndexFocus;
+    //alert("index cata " + _IndexCatalog + " " + index + " np " + getUrlParam()["np"]);
+    _IndexCatalog = ((index + 1) - (_MaxImgPage * (getUrlParam()["np"] - 1))) - 1;
+    _IndexFocus = -1;
+    _ClassDiv = "imgGallery";
+    
+    var maxImgPage = 5;
+    var maxPage = 0;
+    
+    //var numPage = 2;
+    var numPage = np;
+    
+    document.getElementById("idItem").style.visibility = "visible";
+    document.getElementById("idItem").style.zIndex = 1;
+    
+    document.getElementById("idInfo").innerHTML = "<hr>";
+    document.getElementById("idGallery").innerHTML = "";
+    
+    var i;
+    var x = _DATAobj.CATALOG[index];
+    document.getElementById("idInfo").innerHTML += 
+            x.ARTIST + "<br>" + x.YEAR + "<br>" + x.COUNTRY + "<br>";
+    
+    var g = _DATAobj.CATALOG[index].GALLERY;
+
+    //for (i = 0; i < g.length; i++) {
+    for (i = ((maxImgPage * numPage) - maxImgPage); 
+         (i < (maxImgPage * numPage)) && (i < g.length);
+         i++) {
+        
+        document.getElementById("idGallery").innerHTML += 
+            "<img class=\"imgGallery\" src=\"images/" + g[i] + "\" " + 
+            " onload=\"resizeWImg(this, 120)\" " +
+            " onmouseover=\"mouseOverImg(this,'imgGallery')\" " + 
+            " onclick=\"displayImage('" + g[i] +  "')\" " +
+            ">" + 
+            "";
+        
+            //"<br>";
+    }
+    
+    maxPage = Math.ceil(g.length / maxImgPage);
+    document.getElementById("idGalleryFooter").innerHTML = "<br>" + maxPage + " | ";
+    
+    for (i = 0; i < maxPage; i++) {
+        if ((i+1) == numPage) {
+            document.getElementById("idGalleryFooter").innerHTML += " " + 
+            "<a style=\"font-weight:bold; color:red\" class=\"aGalleryFooter\" href=\"javascript:myfunct(" + index +
+            "," + (i+1) + ")\" >" + 
+            (i+1) + "</a>";        
+
+        }
+        else {
+            document.getElementById("idGalleryFooter").innerHTML += " " + 
+            "<a class=\"aGalleryFooter\" href=\"javascript:myfunct(" + index + "," + (i+1) + ")\" >" + 
+            (i+1) + "</a>";                   
+            
+        }
+        
+    }
+    
+    //var e = document.getElementById("idItem");
+    //e.innerHTML += "<img src="">";
+    
+}
+
+function myfunct(index, numPage) {
+    //alert("display item " + index + " " + numPage);
+    displayItem(index, numPage);
+}
+    
+    
+function displayImage(img) {
+    
+    document.getElementById("idImage").style.zIndex = 1;
+    document.getElementById("idItem").style.zIndex = 0;
+    
+    document.getElementById("idImage").style.visibility = "visible";
+    document.getElementById("idDisplayImage").innerHTML = "";
+
+    var b = document.getElementById("idCheckboxImg").checked;
+    
+    document.getElementById("idDisplayImage").innerHTML += 
+        "<img src=\"images/" + img + "\" " +
+        " onclick=\"closeDiv(event, 'idImage')\"                      " +
+        " onmousemove=\"mouseMove(event)\"  " +
+        " onmouseout=\"mouseOut('idImage')\"      " +
+        " onmousedown=\"mouseDown(event)\" " +
+        " ondragstart=\"drag(event)\" " +
+        " draggable=\"true\" " +
+        " id=\"idDropImg\" " +
+        " _onload=\"resizeWWImg(this, 500)\"  " +
+        (b ? " onload=\"resizeWWImg(this, 500)\"  ": "") +
+        " >";
+    
+    //alert(b);
+}
+
+function closeDiv(e, id) {
+    //alert("hello");
+/*    
+  if (e.buttons == 2){
+        //document.getElementById("idItem").style.zIndex = 0;
+        //document.getElementById("idImage").style.zIndex = 1; 
+      alert("button 2");
+  }
+  else {
+        document.getElementById(id).style.visibility = "hidden";
+  }
+*/
+    document.getElementById(id).style.visibility = "hidden";
+
+    
+    var i;
+    var x = document.getElementsByClassName("windows");
+    for (i = 0; i < x.length; i++) {
+        //alert("close " + x[i].id + " " + x.length);
+        if (x[i].style.visibility == "hidden") {
+            x[i].style.zIndex = 0;
+        }
+        else {
+            x[i].style.zIndex = 1;    
+        }
+        
+    }
+    
+    //document.getElementById(id).style.zIndex = 0;
+                //_ClassDiv = "imgCatalog";
+                //_IndexFocus = _IndexCatalog;
+
+    
+    
+}    
+    
+//document.getElementById("idDisplayImage").addEventListener("mouseup", mouseDown);    
+    
+function mouseUp() {
+    
+}    
+
+
+function mouseDown(e) {
+    
+    document.getElementById("idImage").style.border = "1px solid green";
+    var x = e.clientX;
+    var y = e.clientY;
+    var coor = "Coordinates : (" + x + "," + y + ")";
+    
+    _Xe = e.clientX;
+    _Ye = e.clientY;
+    
+    _XDiv = document.getElementById("idImage").offsetLeft;
+    _YDiv = document.getElementById("idImage").offsetTop; 
+    
+    coor += "<br>toto " + _Xe + " , "  + _XDiv + " : " + _Ye + " , " + _YDiv; 
+
+    //document.getElementById("idMoveImage").innerHTML = coor;
+    
+    
+}
+
+    
+function mouseOut(id) {
+    //document.getElementById("idImage").style.border = "1px solid black";
+    document.getElementById(id).style.border = "1px solid black";
+}
+
+function mouseMove(e) {
+    
+    document.getElementById("idImage").style.border = "1px solid red";
+    var x = e.clientX;
+    var y = e.clientY;
+    var coor = "Coordinatess : (" + x + "," + y + ")";
+    
+    var i = document.getElementById("idImage").style.left;
+    var j = document.getElementById("idImage").style.top;
+    coor += "<br>ii " + i + " " + j;
+    coor += "<br>" + _Xe + " " + _XDiv + " : " + _Ye + " " + _YDiv;
+
+    //document.getElementById("idMoveImage").innerHTML = coor;
+
+    
+    if (e.buttons == 2){
+        //document.getElementById("idMoveImage").innerHTML = coor;
+        //document.getElementById("idImage").style.top = y - 100;
+        //document.getElementById("idImage").style.left = x - 100;
+        
+        document.getElementById("idItem").style.zIndex = 0;
+        document.getElementById("idImage").style.zIndex = 1; 
+        
+        document.getElementById("idImage").style.left = x - (_Xe - _XDiv);
+        document.getElementById("idImage").style.top = y - (_Ye - _YDiv);
+        
+    }
+}
+
+  
+    
+</script>
+
+<script>
+    
+function footerPressKey(e) {
+    var x = e.key;
+    var len;
+    
+    if (document.getElementById("idItem").style.visibility == "visible") {
+        //alert("index focus " + _IndexFocus + " " + _IndexCatalog + " " + _ClassDiv);
+        //displayItem(_IndexFocus, 1);
+    
+        len = document.getElementsByClassName("aGalleryFooter").length;
+        if (x > 0 && x < (len + 1)) {
+
+            eval(document.getElementsByClassName("aGalleryFooter")[x - 1].getAttribute('href').replace('javascript:', ''));
+
+        }
+        
+    }
+    else {
+        len = document.getElementsByClassName("aFooter").length;
+        if (x > 0 && x < (len+1)) {
+            window.location.search = "?np=" + x;
+        }
+        //else alert(x + " doesnt exit");
+        
+    }
+}    
+    
+</script>    
+    
+<div class="footer" id="idFooter"></div>     
+
+<style>
+    #idDrop {
+        width: 450px;
+        height: 270px;
+        padding: 10px;
+        border: 1px solid #aaaaaa;
+    }    
+</style>
+<br>
+
+<!--    
+<img id="idDragImg" src="images/wolverine.jpg" ondragstart="drag(event)" > 
+<img id="idDragImg" src="images/wolf.jpg" ondragstart="drag(event)" > 
+
+<div id="idDrop" ondragover="allowDrop(event)" ondrop="drop(event)" ></div>    
+-->
+    
+<script>
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+    
+    
+}
+    
+function allowDrop(ev) {
+    ev.preventDefault();
+    
+}    
+    
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+    
+</script>
+
+<br>
+<input type="checkbox" 
+       onchange="DoCheckbox()"
+       id="idCheckboxImg" 
+       value="hello"><label>Resize Images</label>
+    
+<script>
+
+function loadCheckbox() {
+
+    if (sessionStorage.getItem("name") == "John Doe") {
+        document.getElementById("idCheckboxImg").checked = true;
+    }
+    
+}
+    
+function DoCheckbox() {
+
+    if (document.getElementById("idCheckboxImg").checked == true) {
+        sessionStorage.setItem("name","John Doe");
+    }
+    else {
+        sessionStorage.setItem("name","John Wayne");
+    }
+    
+    document.getElementById("demo").innerHTML = sessionStorage.getItem("name");       
+    
+}    
+</script>    
+
+<!-- videos
+
+<style>
+    #idPlayer {
+        border: 1px solid black;
+        height: 420px;
+        width: 460px;
+        background-color: aquamarine;
+        _margin-top: 5px;
+        position: absolute;
+        _bottom: 0;
+        top: 480px;
+        _right: 0px;
+        _bottom : 500px;
+        left: 360px;
+        
+    }    
+</style>    
+
+<select name="nVideos" id="idSelectVideos" onchange="selectVideo()">
+    <option value="ERT_7u5L0dc">Eye of the tiger</option>
+    <option value="c5BL4RNFr58">Living in America</option>
+    <option value="rkpG4XApJ28">Too shy</option>
+    <option value="RP0_8J7uxhs">Self control</option>
+    <option value="Dsh0TfIKhoE">Beautiful stranger</option>
+    <option value="b3kBDtjRtB0">I started a joke</option>
+    <option value="qq09UkPRdFY">Fantasy</option>
+    <option value="Fe93CLbHjxQ">Ghostbusters</option>
+</select>
+<p id="idSelectDemo"></p>
+    
+<script>
+
+function selectVideo() {
+    var x = document.getElementById("idSelectVideos").value;
+    document.getElementById("idSelectDemo").innerHTML = "You selected : " + x;
+    
+    _VideoPlayer.loadVideoById(x);
+}    
+
+function clickSlider(value) {
+    
+    //alert("slider");
+    var x = document.getElementById("idSliderInfo");
+    x.innerHTML = "New range slider : " + value + " | " + _VideoPlayer.getDuration()
++ " | " + Math.round((value /100) * _VideoPlayer.getDuration());
+    
+    //_VideoPlayer.getDuration()
+    _VideoPlayer.seekTo(Math.round((value /100) * _VideoPlayer.getDuration()));
+    
+    
+}    
+
+function _changeSlider(value) {
+    
+    var x = document.getElementById("idSliderInfo");
+    x.innerHTML = "New range slider : " + value + " | " + _VideoPlayer.getDuration()
++ " | " + Math.round((value /100) * _VideoPlayer.getDuration());
+    
+    //_VideoPlayer.getDuration()
+    _VideoPlayer.seekTo(Math.round((value /100) * _VideoPlayer.getDuration()));
+    
+
+
+}
+
+function mouseoverSlider(e, value) {
+    //var x = document.getElementById("idSliderInfo");
+    //x.innerHTML = value;
+    var d = new Date();
+    //alert("hello");
+    //alert("overr " + d.getSeconds());
+
+    /*
+    var x = e.clientX;
+    var y = e.clientY;
+    var coor = "Coordinates : (" + x + "," + y + ")";
+
+    //document.getElementById("idSliderInfo").innerHTML = coor;
+    
+    setInterval(function() {
+        //document.getElementById("idSliderInfo").innerHTML = coor;
+        
+    }, 1000);
+    */
+}    
+
+function mousemoveSlider(e, t) {
+    var d = document.getElementById("idSliderInfo");
+    //d.innerHTML = value;
+
+    var x = e.clientX;
+    var y = e.clientY;
+    var coor = "Coordinates : (" + x + "," + y + ")";
+    
+    var s = document.getElementById("idSlider");
+    
+    //var w = document.getElementById("idSlider").style.webkitTransform;
+    /*
+    coor += " | " + s.clientTop + 
+            " || " + s.clientWidth +
+            " | " + s.clientHeight +
+            " | " + s.clientLeft;
+            //" | " + s.min + 
+            //" " + s.max;
+    */
+    d.innerHTML = coor;
+    
+    //var m = displayTime(((x - 10) / 200) * _VideoPlayer.getDuration()); 
+    var m = displayTime((((x - 10) - (20 / 2)) / (200 - 20)) * _VideoPlayer.getDuration()); 
+    
+    d.innerHTML +=  " | " + m +
+                    " || " + t.value +
+                    " | " + Math.round((((x - 10) - 10) / 180) * 100) + "%" +
+                    "";
+}    
+
+       
+</script>    
+
+    
+<style>
+    #idSlider {
+        -webkit-appearance: none;
+        width: 200px;
+        height: 20px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+    }
+    #idSlider:hover {
+        opacity: 1;
+    }
+    #idSlider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        _appearance: none;
+        width: 20px;
+        height: 20px;
+        background: green;
+        cursor: pointer;
+        
+    }
+    /* This is a single-line comment */
+    .tooltip {
+        border-bottom: 1px dotted black;
+        display: inline-block;
+        position: relative;
+        margin-left: 50px;
+    }
+    .tooltip .tooltiptext {
+        width: 120px;
+        text-align: center;
+        color: green;
+        background-color: #555;
+        border-radius: 6px;
+        padding: 5px 0;
+        left: 50%;
+        bottom: 125%;
+        margin-left: -60px;
+        _opacity: 0;
+        transition: opacity 0.3s;
+        position: absolute;
+        visibility: hidden;
+        
+    }
+    .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        border-color: #555 transparent transparent transparent;
+        border-width: 5px;
+        border-style: solid;
+        margin-left: -5px;
+        
+        
+    }
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        _opacity: 1;
+        
+    }
+    
+</style>
+    
+<p id="idSound" style="position: right ">Sound</p>
+<p id="idCounter">Counter</p>    
+<button type="button" id="idPlay" onclick="clickPlay()">Play</button>
+<button type="button" id="idPause" onclick="clickPause()">Pause</button>
+<button type="button" id="idStop" onclick="clickStop()">Stop</button>
+<button type="button" id="idMute" onclick="clickMute(_VideoPlayer)">Mute</button>
+<button type="button" id="idSoundUp" onclick="clickSoundUp(_VideoPlayer)">Up</button>
+<button type="button" id="idSoundDown" onclick="clickSoundDown(_VideoPlayer)">Down</button>
+
+<br>
+<div id="idPlayer"></div>
+    
+<p id="idSliderInfo">Default range slider: </p>    
+
+<div class="tooltip">Hover over me
+    <span class="tooltiptext">Tooltip text</span>
+</div>    
+<br>    
+<input id="idSlider" 
+       onclick="clickSlider(this.value)"
+       onchange="changeSlider(this.value)"
+       onmouseover="mouseoverSlider(event, this.value)"
+       onmousemove="mousemoveSlider(event, this)"
+       type="range" 
+       min="1" 
+       max="100"
+       height="25px"
+       value="50">
+ 
+    
+<script>
+
+//alert("hello");    
+//displayVideo();
+var _VideoPlayer;    
+    
+function loadAPIYoutube() {
+        
+    // This code loads the IFrame Player API code asynchronoulsy. This
+    // is the Youtube-recommended script loading method
+    var tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    //var firstScriptTag = document.getElementsByTagName("script")[0];
+    //
+    tag.id = "youtubeScript";
+    var firstScriptTag = document.getElementsByTagName("script")[1];
+    //
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    
+    
+}
+
+    
+// This function is called by Youtube once the API is ready. It
+// create an <iframe> and sets up the video player inside.    
+function onYouTubeIframeAPIReady() {
+    //alert("API Ready");
+    _VideoPlayer = new YT.Player("idPlayer", {
+        height: "320",
+        width: "320",
+        videoId: "Dsh0TfIKhoE",
+        playerVars: {
+            autoplay: 0,
+            controls: 1,
+            rel: 0,
+            fs: 0,
+            shwoinfo: 1,
+            modestbranding: 1,
+            cc_load_policy: 1,
+            cc_lang_pref: 'en'
+        },
+        events : {
+            //API event handlers
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange
+        }
+    });
+}
+
+    
+// The API will call this function when the video player is ready
+// (in this case, start playing the video).
+function onPlayerReady(event) {
+    event.target.loadVideoById('c5BL4RNFr58');
+    event.target.playVideo();
+
+    
+    //clearInterval(inter);
+    
+    var i = 0;
+    var x = document.getElementById("idCounter");
+    var inter = setInterval(function() {
+        
+        //x.innerHTML = "Time | " + displayTime(i++);
+        x.innerHTML = "Time | ";
+        //x.innerHTML += " " + ((_VideoPlayer.getCurrentTime() / _VideoPlayer.getDuration()) * 100).toPrecision(3) + " % | ";
+        x.innerHTML += " " + Math.round((_VideoPlayer.getCurrentTime() / _VideoPlayer.getDuration()) * 100) + " % | ";
+        x.innerHTML += " " + displayTime(_VideoPlayer.getCurrentTime());
+        x.innerHTML += " " + displayTime(_VideoPlayer.getDuration());
+        //x.innerHTML += " "  + displayTime(_VideoPlayer.getDuration() - i);
+    
+        var elem = document.getElementById("idBar");
+        var widthBar = ((_VideoPlayer.getCurrentTime() / _VideoPlayer.getDuration()) * 100).toPrecision(3);
+        elem.style.width = widthBar + "%";
+        
+        var slider = document.getElementById("idSlider");
+        slider.value = widthBar;
+        
+        //document.getElementById("idSliderInfo").innerHTML = slider.value;
+        
+        
+        
+    }, 1000);
+
+}
+    
+function onPlayerStateChange(event) {
+    //alert("state changing ...");
+    
+    var p = _VideoPlayer;
+    var txt = "";
+
+    txt = " " + displayTime(p.getCurrentTime());
+    txt += " " + displayTime(p.getDuration());
+    document.getElementById("idSound").innerHTML = p.getVolume() + txt;
+
+    
+
+}
+
+function displayTime(time) {
+    var t = Math.round(time);
+    var minutes = Math.floor(t / 60);
+    var seconds = t - minutes * 60;
+    
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    
+    return minutes + ":" + seconds;
+}
+    
+    
+function clickPlay() {
+    //_VideoPlayer.loadVideoById('c5BL4RNFr58');
+    _VideoPlayer.playVideo();
+}    
+
+function clickPause() {
+        
+    _VideoPlayer.pauseVideo();
+}    
+
+function clickStop() {
+    _VideoPlayer.stopVideo();
+}
+    
+function clickMute(player) {
+    var p = player;
+    var b = document.getElementById("idMute"); 
+    if (p.isMuted()) {
+        //alert("mute");
+        p.unMute();
+        b.innerHTML = "Mute";        
+    }
+    else {
+        p.mute();
+        b.innerHTML = "Unmute";
+    }
+    
+}    
+
+function clickSoundUp(player) {
+    var p = player;
+    var v = p.getVolume();
+    if (v <= 95) {
+        p.setVolume(v + 5);
+        document.getElementById("idSound").innerHTML = v + 5;
+    }
+}    
+
+function clickSoundDown(player) {
+    var p = player;
+    var v = p.getVolume();
+    if (v > 5) {
+        p.setVolume(v - 5);
+        document.getElementById("idSound").innerHTML = v - 5;
+    }
+    
+}    
+    
+    
+/*
+
+$('#idPlay').click(function() {
+    _VideoPlayer.playVideo();
+});    
+
+$('#idPause').click(function() {
+    _VideoPlayer.pauseVideo();
+});
+*/
+    
+</script>    
+
+<style>
+    #idProgressBar {
+        width: 285px;
+        border: 1px solid black;
+    }
+    #idProgress {
+        width: 100%;
+        background-color: aqua;
+        
+    }
+    #idBar {
+        width: 0%;
+        height: 10px;
+        background-color: blueviolet;
+    }
+</style>    
+
+<br>
+<div id="idProgressBar">   
+    <div id="idProgress" onmousemove="mousemoveIdProgress()">
+        <div id="idBar"></div>
+    </div>    
+</div>
+<br>
+<button onclick="moveProgressBar()">Click Me</button>
+<p id="idProgressBarInfo"></p>
+<script>
+
+function mousemoveIdProgress() {
+    
+    var x = document.getElementById("idProgressBar");
+    var info = document.getElementById("idProgressBarInfo");
+    var d = new Date();
+    var txt = x.clientWidth;
+    
+    info.innerHTML = txt + "toto " + d.getSeconds();
+    
+    //alert("mouse move");
+    
+}
+    
+    
+    
+function moveProgressBar(begin) {
+    
+    var elem = document.getElementById("idBar");
+    var widthBar = 0;
+    
+    var id = setInterval(frame, 1000);
+    function frame() {
+        
+        if (widthBar >= 100){
+            //widthBar = 0;
+            clearInterval(id);
+        }
+        else {
+            //widthBar++;
+            widthBar += 10;
+            elem.style.width = widthBar + "%";
+        }
+        
+    }
+    
+}    
+    
+</script>
+
+<img src="https://img.youtube.com/vi/c5BL4RNFr58/1.jpg">    
+
+-->
+    
+</body>
+</html>
