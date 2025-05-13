@@ -174,11 +174,5 @@
                        "The-Terminator-Poster.jpg",
                        "The-Thing-Movie-Poster.jpg",
                        "Jaws-Movie-Poster.jpg"]   
-    },
-    {       "TITLE": "Toxic",
-            "ARTIST": "Britney Spears",
-            "YEAR": 2004,
-            "COUNTRY": "USA",                    
-            "GALLERY":["Toxic.png"]   
     }
 ]}
