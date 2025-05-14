@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Curriculum Vitae</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+<style>
+
+/**********************
+
+       RESET CSS
+
+**********************/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+    background: #fff;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/**********************
+
+   Variable et Class
+
+**********************/
+
+:root {
+    --grisC: #cacaca;
+    --gris7: #8a8a8a;
+    --border: #aaa;
+    --bleu: #068ec6;
+    --texte: #555;
+    --bgNoir: #111;
+}
+
+.container {
+    width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+section .container {
+    margin: 50px auto;
+    width: 80%;
+}
+
+.noBorder {
+    border: none !important;
+}
+
+.top10 {
+    margin-top: 10px;
+}
+
+/**********************
+
+          CV
+
+**********************/
+
+html {
+    background: var(--grisC);
+    min-width: 100vw;
+    min-height: 100vh;
+    font-family: Arial;
+}
+
+body {
+    border: 1px solid var(--border);
+    background: #fff;
+    width: 90%;
+    max-width: 900px;
+    min-height: calc(90vh - 2px);
+    margin: 5vh auto;
+    border-radius: 5px;
+    box-shadow: 0px 5px 50px var(--gris7);
+}
+
+header {
+    background: var(--bgNoir);
+    height: 150px;
+    color: #fff;
+}
+
+header ul {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1.5fr 1.5fr;
+}
+
+header ul li {
+    height: 150px;
+    padding: 50px 0 0 15%;
+    font-size: 15px;
+    color: #aaa;
+    line-height: 1.5;
+}
+
+header ul li strong {
+    display: block;
+    text-transform: uppercase;
+    color: #eee;
+    font-size: 14px;
+}
+
+header ul li:nth-child(2) {
+    padding-left: 20%;
+}
+
+header ul li:nth-child(3) {
+    padding-left: 15%;
+}
+
+header ul li:first-child {
+    background: var(--bleu);
+    color: #fff;
+    height: 110px;
+    padding: 40px 16% 0 16%;
+}
+
+header ul li #prenom, header ul li #nom {
+    display: block;
+    font-size: 28px;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+
+header ul li #nom {
+    font-weight: bold;
+    _font-size: 30px;
+    font-size: 18px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+}
+
+aside {
+    background: #e5eaeb;
+    min-height: calc(100vh - 150px);
+    padding:0 10%;
+}
+
+aside img {
+    width: 100%;
+    margin: 60px auto 60px;
+    display: block;
+    border-radius: 50%;
+}
+
+aside h2, section article h2 {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+aside p {
+    color: var(--texte);
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #cecece;
+    line-height: 1.4;
+}
+
+section article {
+    border-top: 1px solid #cecece;
+    margin-bottom: 50px;
+}
+
+section article h2 {
+    width: auto;
+    background: #fff;
+    border-right: 1px solid #cecece;
+    position: relative;
+    top: -10px;
+    display: inline-block;
+    padding-right: 10px;
+}
+
+section article p {
+    color: var(--texte);
+    line-height: 1.2;
+}
+
+section article li.exp {
+    display: grid;
+    grid-template-columns: 105px auto;
+    margin-bottom: 20px;
+}
+
+section article li span.periode {
+    border-right: 1px solid var(--border);;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+section article li.exp span.desc {
+    padding-left: 20px;
+    line-height: 1.4;
+    color: var(--texte);
+}
+
+section article li.exp span.desc strong {
+    font-weight: bold;   
+}
+
+footer {
+    background: var(--bgNoir);
+    height: 50px;
+}
+
+footer ul {
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+}
+
+footer ul li:first-child {
+    ackground: var(--bleu);
+    background: #444;
+    height: 50px;
+}
+
+footer ul li:nth-child(2) img {
+    height: 14px;
+    position: relative;
+    top: 3px;
+}
+
+footer ul li:nth-child(2) {
+    display: block;
+    text-align: center;
+    width: 100%;
+    height: 35px;
+    padding-top: 15px;
+}
+
+footer ul li:nth-child(2) a {
+    color: #999;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+footer ul li:nth-child(2) a:hover {
+    text-decoration: underline;
+}
+
+/**********************
+
+     MEDIA QUERY
+
+**********************/
+@media (max-width: 1024px) {
+
+    header ul li #prenom, header ul li #nom {
+        font-size: 22px;
+    }
+    header ul li:first-child {
+        padding: 50px 16% 0 16%;
+        text-align: center;
+    }
+    header ul li {
+        font-size: 13px;
+    }
+    header ul li strong {
+        font-size: 14px;
+    }
+    
+}
+
+@media (max-width: 750px) {
+    
+    body {
+        width: 98%;
+        margin: 1vh auto;
+    }
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    header {
+        height: auto;
+    }
+    header ul {
+        grid-template-columns: 1fr;
+    }
+    header ul li:first-child {
+        height: auto;
+        padding: 20px 0;
+    }
+    header ul li:nth-child(2) {
+        padding-left: 0%;
+        padding-top: 30px;
+    }
+    header ul li:nth-child(3) {
+        padding: 10px 0%;
+    }
+    header ul li:nth-child(4) {
+        padding-bottom: 30px; 
+        padding-left: 0%;
+    }
+    header ul li {
+        height: auto;
+        padding: 20px 0;
+        text-align: center;
+    }
+    aside {
+        text-align: center;
+    }
+    aside img {
+        max-width: 300px;
+    }
+    main {
+        grid-template-columns: 1fr;
+    }
+    section article, section article h2 {
+        border: none;
+    }
+    section article li.exp {
+        grid-template-columns: 85px auto;
+    }
+    section article li span.periode {
+        font-size: 12px;
+    }
+    footer ul {
+        grid-template-columns: 0fr 1fr;
+    }
+}
+
+
+
+
+</style>
+
+
+</head>
+
+<body>
+    <header>
+        <ul class="container">
+            <li>
+                <h1>
+                    <span id="prenom">Simon</span>
+                    <span id="nom">Sykhanouanexay</span>
+                </h1>
+            </li>
+            <li>
+                <strong>Adresse</strong>
+                4 rue Guy Moquet<br>95500 Gonesse
+            </li>
+            <li>
+                <strong>Téléphone</strong>
+                07 62 82 54 66
+            </li>
+            <li>
+                <strong>Mail</strong>
+                sykhanou@hotmail.com
+            </li>
+        </ul>
+    </header>
+
+    <main class="container">
+        <aside>
+            <img _src="photo3.webp" _alt="Photo du cv">
+
+            <article>
+                <h2>Compétences</h2>
+                <p>
+                    Développeur web<br>
+                    Graphiste<br>
+                </p>
+            </article>
+
+            <article>
+                <h2>Langues</h2>
+                <p>
+                    Français<br>
+                    Anglais<br>
+                </p>
+            </article>
+
+            <article>
+                <h2>Centre d'intérêt</h2>
+                <p class="noBorder">
+                    Informatique<br>
+                    Golf<br>
+                    Tennis<br>
+                    Architecture
+                </p>
+            </article>
+        </aside>
+
+        <section>
+            <div class="container">
+                <article>
+                    <h2>Présentation</h2>
+                    <p>Passionné par la création et l'innovation digitale, je suis un développeur web polyvalent. Je
+                        maîtrise les langages de programmation tels que HTML, CSS, JavaScript et PHP. Je suis
+                        constamment à l'affût des dernières tendances technologiques pour fournir des solutions web
+                        efficaces et innovantes. Fort de mes compétences en développement web, je suis capable de
+                        concevoir et de mettre en œuvre des sites web interactifs, intuitifs et performants, tout en
+                        respectant les normes de sécurité et les bonnes pratiques de développement. Dynamique, autonome
+                        et doté d'un esprit d'équipe, je suis prêt à relever de nouveaux défis et à contribuer au succès
+                        de projets ambitieux.</p>
+                </article>
+                <article>
+                    <h2>Formations et diplomes</h2>
+                    <ul>
+                        <li class="exp">
+                            <span class="periode">1917 - 2000</span>
+                            <span class="desc">EFREI de Paris</span>
+                        </li>
+                        <li class="exp">
+                            <span class="periode">1994 - 1996</span>
+                            <span class="desc">DEUG A Scientifique. University Paris Villetaneuse</span>
+                        </li>
+                        <li class="exp">
+                            <span class="periode">1993</span>
+                            <span class="desc">Baccalauréat Scientifique</span>
+                        </li>
+                    </ul>
+                </article>
+                <article>
+                    <h2>Expérience</h2>
+                    <ul class="top10">
+                        <li class="exp">
+                            <span class="periode">2003</span>
+                            <span class="desc"><strong>Ingénieur en dévelopment</strong><br>Orcos, Paris</span>
+                        </li>
+                        <li class="exp">
+                            <span class="periode">2000</span>
+                            <span class="desc"><strong>Développeur Web Junior</strong><br>IAC Consulting, Paris</span>
+                        </li>
+                        <li class="exp">
+                            <span class="periode">1999</span>
+                            <span class="desc"><strong>Stagiaire Développeur Web</strong><br>IAC Consulting,
+                                Paris</span>
+                        </li>
+                    </ul>
+                </article>
+
+                <br><br><br><br><br><br><br><br>
+
+            </div>
+        </section>
+
+
+    </main>
+
+    <footer>
+        <ul class="container">
+            <li></li>
+            <li>
+                <!-- <img src="mail2.jpg" alt="logo Facebook"> -->
+                <a href="#">Simon Sykhanouanexay</a>
+            </li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>
