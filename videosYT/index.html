@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f1f1f1;
+  padding: 20px;
+  font-family: Arial;
+}
+
+/* Center website */
+.main {
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 50px;
+  word-break: break-all;
+}
+
+.row {
+  margin: 10px -16px;
+}
+
+/* Add padding BETWEEN each column */
+.row,
+.row > .column {
+  padding: 8px;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33.33%;
+  /* width: 24.999999%; */
+  display: none; /* Hide all elements by default */
+}
+
+/* Clear floats after rows */ 
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Content */
+.content {
+  background-color: white;
+  padding: 10px;
+}
+
+/* The "show" class is added to the filtered elements */
+.show {
+  display: block;
+}
+
+/* Style the buttons */
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+
+.btn.active {
+  background-color: #666;
+  color: white;
+}
+</style>
+
+
+
+</head>
+<body>
+
+
+
+<h1>3MYLOGO.COM</h1>
+<hr>
+
+
+<!-- Youtube Videos -->
+
+<style>
+	#IdPlayer {
+		_border: 1px solid red;
+	}
+</style>
+
+<!-- 1. The <iframe> (and video player) will replace this <div> tage. -->
+<div id="IdPlayer"></div>
+<br>
+
+<script>
+
+// 2. This code loads the IFrame Player API code Asynchronously
+var tag = document.createElement('script');
+
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 3. This function creates an <iframe> (and YouTube player)
+// 	after the API code downloads.
+var player;
+function onYouTubeIframeAPIReady() {
+	player = new YT.Player('IdPlayer', {
+		height: '360',
+		width: '640',
+		videoId: '3JWTaaS7LdU',
+		events: {
+			'onReady': onPlayerReady,
+			'onStateChange': onPlayerStateChange
+		
+		}
+	
+	});
+}
+
+function onPlayerReady(event) {
+//	alert("hello");
+	event.target.playVideo();
+}
+
+function onPlayerStateChange(event) {
+}
+
+function displayVideo(videoId) {
+    player.loadVideoById(videoId);
+	player.playVideo();
+}
+
+</script>
+
+<!-- END Youtube Videos -->
+
+<hr>
+
+
+<h2>PORTFOLIO</h2>
+
+<div id="myBtnContainer">
+  <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+  <!-- <button class="btn" onclick="filterSelection('nature')"> Nature</button>
+  <button class="btn" onclick="filterSelection('cars')"> Cars</button>
+  <button class="btn" onclick="filterSelection('people')"> People</button>
+  <button class="btn" onclick="filterSelection('music')"> Music</button> -->
+</div>
+
+
+
+    
+<hr>
+<h2>Create Object from JSON String</h2>
+<p id="demo1"></p>
+<!-- <p id="demo"></p> -->
+
+
+<script>
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function createButton(key) {
+  var btnContainer = document.getElementById("myBtnContainer");
+  var x = document.createElement("BUTTON");
+  const s = capitalizeFirstLetter(key);
+  var t = document.createTextNode(s);
+  x.appendChild(t);
+  x.classList.add("btn");
+  x.addEventListener("click", function() {
+    // filterSelection('nature');
+    filterSelection(' ' + key);
+  });
+  btnContainer.appendChild(x);
+
+}
+
+// var btnContainer = document.getElementById("myBtnContainer");
+// var btns = btnContainer.getElementsByClassName("btn");
+// for (var i = 0; i < btns.length; i++) {
+//   btns[i].addEventListener("click", function(){
+//     var current = document.getElementsByClassName("active");
+//     current[0].className = current[0].className.replace(" active", "");
+//     this.className += " active";
+//   });
+// }
+
+
+</script>
+
+
+<script>
+// music
+var myJSON =  '{                                                      ' +
+            '    "man":[                                      ' +
+            '        {"Title":"Africa", "Author":"TOTO", "id": "FTQbiNvZqaY"},  ' +
+            '        {"Title":"Hotel California", "Author":"Eagles", "id": "09839DpTctU"},  ' +
+            '        {"Title":"Eyes without a face", "Author":"Billy Idol", "id": "9OFpfTd0EIs"},  ' +
+            '        {"Title":"Losing my religion", "Author":"R.E.M", "id": "xwtdhWltSIg"},  ' +
+            '        {"Title":"Eye of the tiger", "Author":"Survivor", "id": "btPJPFnesV4"},  ' +
+            '        {"Title":"Down under", "Author":"Men at work", "id": "XfR9iY5y94s"},  ' +
+            '        {"Title":"Uptown girl", "Author":"Billy Joel", "id": "hCuMWrfXG4E"},  ' +
+            '        {"Title":"Heart of glass", "Author":"Blondie", "id": "WGU_4-5RaxU"},  ' +
+            '        {"Title":"Sultans of swing", "Author":"Dire Straits", "id": "8Pa9x9fZBtY"}       ' +
+            '                ],                                      ' +
+            '    "woman":[                                      ' +
+            '        {"Title":"Cambodia", "Author":"Kim Wilde", "id": "BERFZja9wb0"},  ' +
+            '        {"Title":"You keep me hanging on", "Author":"Kim Wilde", "id": "xJZF-skCY-M"},  ' +
+            '        {"Title":"You came", "Author":"Kim Wilde", "id": "P6Agwu_5J14"}       ' +
+            '                ],                                      ' +
+            '    "band":[                                      ' +
+            '        {"Title":"Creep", "Author":"Radiohead", "id": "XFkzRNyygfk"},  ' +
+            '        {"Title":"Self control", "Author":"Laura Branigan", "id": "RP0_8J7uxhs"}       ' +
+            '                ]                                      ' +
+
+            '}';
+    
+var myObj = JSON.parse(myJSON);
+
+let text = `<div class="row">`;
+for (const x in myObj) {
+  // text += x + ", ";
+  createButton(x);
+  for (let i in myObj[x]) {
+
+    
+    let desc = myObj[x][i].Author + " - " + myObj[x][i].Title + " : " + myObj[x][i].id + "<br>";
+    let src = "https://img.youtube.com/vi/" + myObj[x][i].id + "/0.jpg";
+
+    text += `<div class="column ${x}" >`;
+    text += ` <div class="content" >`;
+    text += `  <img onclick="displayVideo('${myObj[x][i].id}')" src="${src}" style="width:100%" >`;
+    text += `  <h4>${myObj[x][i].Author}</h4>`;
+    text += `  <p>${myObj[x][i].Title}</p>`;
+    text += ` </div>`;
+    text += `</div>`;
+
+  }
+  // text += '<hr>';
+}
+text += `</div>`;
+
+document.getElementById("demo1").innerHTML = text;
+
+
+</script> 
+
+
+
+
+
+<script>
+filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("column");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
+</script>
+
+
+<hr>
+
+
+
+
+</body>
+</html>
